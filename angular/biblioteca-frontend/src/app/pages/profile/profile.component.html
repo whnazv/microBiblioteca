@@ -1,0 +1,11 @@
+<h2>Perfil</h2>
+
+<p>Email: {{ email }}</p>
+
+<p *ngIf="isAdmin()">Eres ADMIN</p>
+<p *ngIf="isClient()">Eres CLIENTE</p>
+<p *ngIf="!isAdmin() && !isClient()">No tienes un rol válido o no estás registrado correctamente.</p>
+
+<button (click)="auth.logout(); router.navigate(['/login'])">
+  Cerrar sesión
+</button>
