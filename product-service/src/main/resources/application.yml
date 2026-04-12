@@ -1,12 +1,23 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/productdb
-    username: tu_usuario
-    password: tu_contraseña
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5433/productdb
+    username: usuario
+    password: contra
+
+  application:
+    name: product-service
+
 server:
-  port: 8080
+  port: 8099
+
+logging:
+  level:
+    org.springframework.r2dbc: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+

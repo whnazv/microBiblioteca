@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
 
   # ============================
@@ -15,6 +17,18 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  postgres-productdb:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: productdb
+      POSTGRES_USER: usuario
+      POSTGRES_PASSWORD: contra
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_product_data:/var/lib/postgresql/data
+      - ./init-productdb.sql:/docker-entrypoint-initdb.d/init-productdb.sql
+
   pgadmin:
     image: dpage/pgadmin4
     ports:
@@ -24,6 +38,7 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     depends_on:
       - postgres
+      - postgres-productdb
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
@@ -94,20 +109,28 @@ services:
       - kafka
       - eureka-server
 
-  api-gateway:
-    build: ./api-gateway
+  product-service:
+    build: ./product-service
     ports:
       - "8080:8080"
     depends_on:
+      - postgres-productdb
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8084:8080"
+    depends_on:
       - auth-service
       - user-service
+      - product-service
       - eureka-server
 
 volumes:
   postgres_data:
+  postgres_product_data:
   pgadmin_data:
   keycloak_data:
   kafka_data:
   zookeeper_data:
   zookeeper_log:
-

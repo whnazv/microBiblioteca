@@ -1,0 +1,24 @@
+package com.whnazv.productservice.infrastructure.persistence.entity;
+
+import lombok.Data;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
+import java.time.LocalDateTime;
+
+@Data
+@Table(schema = "product_service", name = "categories")
+public class CategoryEntity {
+
+    @Id
+    private Long id;
+
+    private String name;
+
+    @Column("created_at")
+    private LocalDateTime createdAt;
+
+    @Column("parent_id")
+    private Long parentId;
+}
